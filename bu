@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+docker-compose run -eANT_OPTS=-D"file.encoding=UTF-8" swag_apache ant -f /var/www/html/build/build.xml build-unit
+echo -e "\e[43m\e[30m Remember to set dev values in config.php! \e[0m\e[39m"

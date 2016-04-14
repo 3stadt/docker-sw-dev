@@ -1,0 +1,23 @@
+├── apache-php5.6-ioncube-build # Build folder for php with ioncube
+│   ├── php # A php.ini inside here will be integrated in the build
+│   └── Dockerfile # Build instructions, extending from php:5.6-apache
+├── apache-php7-build # Build folder for latest php, but without ioncube
+│   ├── php # A php.ini inside here will be integrated in the build
+│   └── Dockerfile # Build instructions, extending from php:7-apache
+├── mysql
+│   ├── conf.d # Mysql config files in here will be integrated in the build
+│   └── data # The place where the mysql container stores it's data
+├── mysql-build
+│   └── Dockerfile # Build file for the mysql container, extends mariadb
+├── antconf # bash script: Configures ant. Use 'mysql' as mysql host!
+├── bu # bash script: executes a build unit
+├── clear_cache # bash script: executes 'clear_cache.sh'
+├── _delete_all_images_and_containers.sh # bash script
+├── docker-compose.yml.dist # The main config file. You want to copy & change this!
+├── reset # bash script: resets your containers
+├── setperms # bash script: Needs to be executed after changes from inside the container
+├── start # bash script: starts all containers
+├── stop # bash script: stops all containers
+└── variables.cfg.dist # bash script: You want to copy & change this!
+
+11 directories, 577 files

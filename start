@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+docker-compose up -d
+printf "\nDone. \e[43m\e[30mIt may be neccessary to execute ./setperms\e[0m\e[39m\n\n"
