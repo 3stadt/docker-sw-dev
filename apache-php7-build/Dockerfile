@@ -25,6 +25,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && echo "sendmail_path = /usr/sbin/ssmtp -t" > /usr/local/etc/php/conf.d/sendmail.ini \
     && echo "mailhub=smtp:1025\nUseTLS=NO\nFromLineOverride=YES" > /etc/ssmtp/ssmtp.conf
 
+RUN pecl install xdebug
+RUN docker-php-ext-enable xdebug
+
+COPY xdebug/ext-xdebug.ini /usr/local/etc/php/conf.d/
+
 RUN a2enmod rewrite
 
 WORKDIR /var/www/html

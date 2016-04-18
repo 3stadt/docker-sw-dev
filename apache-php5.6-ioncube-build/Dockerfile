@@ -30,6 +30,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && rm ioncube_loaders_lin_x86-64.tar.gz \
     && echo "zend_extension = /var/www/ioncube/ioncube_loader_lin_5.6.so" > /usr/local/etc/php/conf.d/ioncube.ini
 
+RUN pecl install xdebug
+RUN docker-php-ext-enable xdebug
+
+COPY xdebug/ext-xdebug.ini /usr/local/etc/php/conf.d/
+
 RUN a2enmod rewrite
 
 WORKDIR /var/www/html

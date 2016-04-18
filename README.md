@@ -1,7 +1,7 @@
 > __Attention__
 > This docker setup was put together on a linux system, so on other systems there may be some uncovered scenarios. Feel free to contribute!
 
-## Prerequisites
+# Prerequisites
 
 - [Docker](https://docs.docker.com/) including docker-compose
 
@@ -17,7 +17,7 @@ $ docker-compose --version                                                      
 docker-compose version 1.6.2, build 4d72027
 ```
 
-## Configuration
+# Configuration
 
 First, a quick overview of the project files.
 
@@ -58,8 +58,28 @@ First, a quick overview of the project files.
 
 Generally speaking, if you can't or don't want to use the provided scripts, take a look inside the files and execute the commands by hand.
 
-## Usage
+# Usage
 
 For starting and stopping use the corresponding scripts. If everything goes wrong, use `_delete_all_images_and_containers` - be aware that this globally affects all docker images and containers.
 
 After switching branches or if you feel like it, use `bu` to do a build unit. To switch between php5.6 and php7, change the line that reads `build: ./apache-php7-build` to `build: ./apache-php5.6-ioncube-build` and execute `docker-compose build` after stopping all containers. Do a `bu` afterwards.
+
+## Xdebug
+
+Xdebug is installed inside the swag_apache container, but not active by default in order to save performance.
+To use it, you need to set up your IDE. In this readme, only PHPStorm will be covered, if you are using a different IDE you are welcome to adapt the instructions and make a pull request to update this readme.
+
+First, you need to setup a server. Within PHPStorm, navigate to `File` > `Settings` > `Language & Frameworks` > `PHP` > `Servers` and add a new one via the `+` icon or use your existing one.
+Make sure `Host` and `Port` are set up correctly, these values depend on your system setup. `Debugger` has to be set to `Xdebug`.
+For your `Project Files`, set the `Absolute Path on the server` to `/var/www/html`. Apply/Save.
+
+Next, switch to `File` > `Settings` > `Languages & Frameworks` > `PHP` > `Debug` and make sure `Ignore external connections through unregistered server configurations` is _not_ selected while `Xdebug – Can accept external connections` must be selected. Apply/Save.
+
+Now close the settings menu and navigate to `Run` > `Edit configurations`. Add a new `PHP Remote Debug` configuration via the green `+` sign on the top left.
+Name it however you want, then select your server from the last step. You can freely choose the `Ide key(session id)`, e.g. _XDEBUG_PHPSTORM_. Apply/Save.
+
+### Usage
+
+To start a session, first set breakpoints. Then, activate the debug configuration, either via the run menu or by choosing and starting a configuration at the top right in PHPStorm. A Debugger window shoul pop up inside PHPStorm.
+
+As final step load your site in the browser and add your IDE key. Example: `http://shopware.local/?XDEBUG_SESSION_START=XDEBUG_PHPSTORM` where `XDEBUG_PHPSTORM` is the IDE key you've choosen during configuration.
