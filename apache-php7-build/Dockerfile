@@ -1,6 +1,6 @@
 FROM php:7-apache
 
-COPY php/php.ini /usr/local/etc/php/
+ADD php/_010_php.ini /usr/local/etc/php/
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
         ant \
@@ -16,13 +16,14 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
         ssmtp \
         wget \
         tar \
+        nano \
     && docker-php-ext-install -j$(nproc) iconv mcrypt \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install mbstring \
     && docker-php-ext-install zip \
     && docker-php-ext-install pdo pdo_mysql \
-    && echo "sendmail_path = /usr/sbin/ssmtp -t" > /usr/local/etc/php/conf.d/sendmail.ini \
+    && echo "sendmail_path = /usr/sbin/ssmtp -t" > /usr/local/etc/php/conf.d/_011_sendmail.ini \
     && echo "mailhub=smtp:1025\nUseTLS=NO\nFromLineOverride=YES" > /etc/ssmtp/ssmtp.conf
 
 RUN pecl install xdebug
