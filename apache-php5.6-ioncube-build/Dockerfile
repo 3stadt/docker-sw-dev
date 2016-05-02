@@ -35,8 +35,11 @@ RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug
 
 COPY xdebug/ext-xdebug.ini /usr/local/etc/php/conf.d/
+COPY sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
 
+RUN a2enmod vhost_alias
 RUN a2enmod rewrite
+RUN a2ensite 000-default
 
 WORKDIR /var/www/html
 
