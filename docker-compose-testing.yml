@@ -1,0 +1,39 @@
+version: '2'
+services:
+  swag_apache_testing:
+    extends:
+      file: docker-base.yml
+      service: swag_apache
+    build: ./apache-php7-build-testing
+    links:
+      - swag_db:mysql
+      - swag_smtp:smtp
+  swag_cli:
+    extends:
+      file: docker-base.yml
+      service: swag_cli
+    links:
+      - swag_db:mysql
+  swag_smtp:
+    extends:
+      file: docker-base.yml
+      service: swag_smtp
+  swag_db:
+    extends:
+      file: docker-base.yml
+      service: swag_db
+  swag_pma:
+    extends:
+      file: docker-base.yml
+      service: swag_pma
+    links:
+      - swag_db:db
+  selenium:
+    image: selenium/standalone-firefox-debug:2.53.0
+    ports:
+      - 4444:4444
+      - 5900:5900
+    volumes:
+      - /dev/shm:/dev/shm
+    links:
+      - swag_apache_testing:shopware.localhost
