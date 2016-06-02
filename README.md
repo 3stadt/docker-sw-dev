@@ -23,46 +23,62 @@ First, a quick overview of the project files.
 
 ```bash
 .
-├── apache-php5.6-ioncube-build # Build folder for php with ioncube
-│   ├── php # A php.ini inside here will be integrated in the build
-│   └── Dockerfile # Build instructions, extending from php:5.6-apache
-├── apache-php7-build # Build folder for latest php, but without ioncube
-│   ├── php # A php.ini inside here will be integrated in the build
-│   └── Dockerfile # Build instructions, extending from php:7-apache
+├── build-* #multiple build folders for all containers
+├── _delete_all_images_and_containers.sh #Only use if you understand the source
+├── docker-base.yml.dist #customize and rename to *.yml
+├── docker-compose-testing.yml.dist #customize and rename to *.yml
+├── docker-compose.yml #Entry point for production containers
 ├── mysql
-│   ├── conf.d # Mysql config files in here will be integrated in the build
-│   └── data # The place where the mysql container stores it's data
-├── mysql-build
-│   └── Dockerfile # Build file for the mysql container, extends mariadb
-├── antconf # bash script: Configures ant. Use 'mysql' as mysql host!
-├── bu # bash script: executes a build unit
-├── clear_cache # bash script: executes 'clear_cache.sh'
-├── _delete_all_images_and_containers.sh # bash script
-├── docker-compose.yml.dist # The main config file. You want to copy & change this!
-├── reset # bash script: resets your containers
-├── setperms # bash script: Needs to be executed after changes from inside the container (linux only (?))
-├── start # bash script: starts all containers
-├── stop # bash script: stops all containers
-└── variables.cfg.dist # bash script: Optional: copy & change this!
+│   ├── conf.d #Holds optional mysql ini files
+│   └── data #will contain mysql data files
+└── README.md #The file your are reading right now
 
 ```
 
-- copy the file `docker-compose.yml.dist` to `docker-compose.yml`
+- copy the file `docker-base.yml.dist` to `docker-base.yml`
   - If you want to, change all entries regarding `ports`
     - The format is localport:containerport, only change the localport
-  - Change the `volumes` entry that reads `- ~/Code/shopware:/var/www/html`
-    - You have to change the part before `:`, it has to point to your shopware root dir
+  - Change the `volumes` entry that reads `- ~/Code:/var/www/html`
+    - You have to change the part before `:`, it has to point to the folder your shopware root foolder resides in. Note: Not the shopware folder itself!
   - change `MYSQL_ROOT_PASSWORD`and `PMA_PASSWORD` to the same value
-- Execute the script `start` or alternatively do `docker-compose up -d`
-- Execute the script `antconf` or alternatively do `docker-compose run -eANT_OPTS=-D"file.encoding=UTF-8" swag_apache ant -f /var/www/html/build/build.xml configure`.
-
-Generally speaking, if you can't or don't want to use the provided scripts, take a look inside the files and execute the commands by hand.
 
 # Usage
 
-For starting and stopping use the corresponding scripts. If everything goes wrong, use `_delete_all_images_and_containers` - be aware that this globally affects all docker images and containers.
+## Starting and stopping, and other commands
 
-After switching branches or if you feel like it, use `bu` to do a build unit. To switch between php5.6 and php7, change the line that reads `build: ./apache-php7-build` to `build: ./apache-php5.6-ioncube-build` and execute `docker-compose build` after stopping all containers. Do a `bu` afterwards.
+To start, stop and maintain your containers, you use simple `docker-compose` and `docker` commands.
+
+Dev environment start: `docker-compose up -d --force-recreate`
+Testing environment start (no xdebug, but with selenium): `docker-compose up -f docker-compose-testing.yml -d --force-recreate`
+
+Dev environment stop: `docker-compose stop`
+Testing environment stop: `docker-compose -f docker-compose-testing.yml stop`
+
+Please note: Testing and dev environment shouldn't be started at the same time
+
+There are other useful commands listed below. Please note there is a GO tool `swdc` which simplifies the usage of these commands. Refer to n.dzoesch@shopware.com for further questions.
+
+```bash
+#Perform ant-configure on a project
+docker-compose run -eANT_OPTS=-D"file.encoding=UTF-8"-u1000 swag_cli ant -f /var/www/html/<PROJECTFOLDER>/build/build.xml configure
+
+#Perform 'ant build-unit' on a project
+docker-compose run -eANT_OPTS=-D"file.encoding=UTF-8" -u1000 swag_cli ant -f /var/www/html/<PROJECTFOLDER>/build/build.xml build-unit
+
+#Clear the chaches of a project
+docker-compose run -u1000 swag_cli /var/www/html/<PROJECTFOLDER>/var/cache/clear_cache.sh
+
+```
+
+Replace `<PROJECTFOLDER>` with the folder name of a shopware installation.
+
+## SW Tools
+
+At the time being the sw tools are not included and have to be installed outside the containers.
+
+## Serving content
+
+The apache container is configured in a way that it uses the domain name to look up the actual folder it should serve files from. Example: You've set the entry `- ~/Code:/var/www/html` (see above) to `- /my/folder:/var/www/html` and then create `/my/folder/foobar` on your system. Then you edit your hosts file to point `foobar.localhost` to `127.0.0.1` and visit `http://foobar.localhost` in your browser. Apache now dynamically serves the content of `/my/folder/foobar` to your browser.
 
 ## Xdebug
 

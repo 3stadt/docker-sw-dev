@@ -1,19 +1,14 @@
 version: '2'
 services:
   swag_apache:
-    build: ./apache-php7-build
-    links:
-      - swag_db:mysql
-      - swag_smtp:smtp
+    build: ./build-apache-php7
     ports:
       - 80:80
       - 443:443
     volumes:
-      - ~/Code/shopware:/var/www/html
+      - ~/Code:/var/www/html
   swag_cli:
-    build: ./apache-php7-cli-build
-    links:
-      - swag_db:mysql
+    build: ./build-php7-cli
     volumes:
       - ~/Code:/var/www/html
   swag_smtp:
@@ -22,7 +17,7 @@ services:
       - 1025:1025
       - 8025:8025
   swag_db:
-    build: ./mysql-build
+    build: ./build-mysql
     environment:
       MYSQL_ROOT_PASSWORD: toor
       MYSQL_DATABASE: shopware
@@ -35,11 +30,9 @@ services:
       - ./mysql/data:/var/lib/mysql
   swag_pma:
     image: phpmyadmin/phpmyadmin
-    links:
-      - swag_db:db
     ports:
       - 8181:80
     environment:
-      PMA_SECRET: change_this_for_security_reasons
+      PMA_SECRET: KSyZsnrO9E5lk04uarNCC67kxZTqoUK1
       PMA_USER: root
       PMA_PASSWORD: toor
