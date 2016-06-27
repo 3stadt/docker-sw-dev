@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
         libxml2 \
         libxml2-dev \
         openssl \
-    && docker-php-ext-install -j$(nproc) iconv mcrypt \
+    && docker-php-ext-install -j$(nproc) iconv mcrypt mysqli \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install mbstring \

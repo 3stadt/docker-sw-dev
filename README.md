@@ -3,7 +3,7 @@
 
 # Prerequisites
 
-- [Docker](https://docs.docker.com/) including docker-compose
+- [Docker](https://docs.docker.com/) including [docker-compose](https://docs.docker.com/compose/install/)
 
 Check if your system is meeting the prerequisites (versions may vary):
 
@@ -35,11 +35,11 @@ First, a quick overview of the project files.
 
 ```
 
-- copy the file `docker-base.yml.dist` to `docker-base.yml`
+- **copy** the file `docker-base.yml.dist` to `docker-base.yml`
   - If you want to, change all entries regarding `ports`
     - The format is localport:containerport, only change the localport
   - Change the `volumes` entry that reads `- ~/Code:/var/www/html`
-    - You have to change the part before `:`, it has to point to the folder your shopware root foolder resides in. Note: Not the shopware folder itself!
+    - You have to change the part before `:`, it has to point to the folder your shopware root folders resides in. Note: Not the shopware folder itself!
   - change `MYSQL_ROOT_PASSWORD`and `PMA_PASSWORD` to the same value
 
 # Usage
@@ -48,29 +48,36 @@ First, a quick overview of the project files.
 
 To start, stop and maintain your containers, you use simple `docker-compose` and `docker` commands.
 
+The difference between testing and dev environments is: The testing environments are staring a selenium instance for running Mink tests and for performance reasons they do not contain XDebug.
+
 Dev environment start: `docker-compose up -d --force-recreate`
-Testing environment start (no xdebug, but with selenium): `docker-compose up -f docker-compose-testing.yml -d --force-recreate`
+Testing environment start: `docker-compose up -f docker-compose-testing.yml -d --force-recreate`
 
 Dev environment stop: `docker-compose stop`
 Testing environment stop: `docker-compose -f docker-compose-testing.yml stop`
 
-Please note: Testing and dev environment shouldn't be started at the same time
+Please note: Testing and dev environment must not be started at the same time
 
 There are other useful commands listed below. Please note there is a GO tool `swdc` which simplifies the usage of these commands. Refer to n.dzoesch@shopware.com for further questions.
 
 ```bash
 #Perform ant-configure on a project
-docker-compose run -eANT_OPTS=-D"file.encoding=UTF-8"-u1000 swag_cli ant -f /var/www/html/<PROJECTFOLDER>/build/build.xml configure
+docker-compose run -eANT_OPTS=-D"file.encoding=UTF-8"-u1000 \
+swag_cli ant -f /var/www/html/<PROJECTFOLDER>/build/build.xml configure
 
 #Perform 'ant build-unit' on a project
-docker-compose run -eANT_OPTS=-D"file.encoding=UTF-8" -u1000 swag_cli ant -f /var/www/html/<PROJECTFOLDER>/build/build.xml build-unit
+docker-compose run -eANT_OPTS=-D"file.encoding=UTF-8" -u1000 \
+swag_cli ant -f /var/www/html/<PROJECTFOLDER>/build/build.xml build-unit
 
 #Clear the chaches of a project
-docker-compose run -u1000 swag_cli /var/www/html/<PROJECTFOLDER>/var/cache/clear_cache.sh
+docker-compose run -u1000 \
+swag_cli /var/www/html/<PROJECTFOLDER>/var/cache/clear_cache.sh
 
 ```
 
 Replace `<PROJECTFOLDER>` with the folder name of a shopware installation.
+
+*Please note the -u1000 part:* This guide assumes you are using linux. The user id 1000 is usually your user id. If this is not the case, you have to change this value in the commands and the Dockerfiles!
 
 ## SW Tools
 
@@ -78,7 +85,11 @@ At the time being the sw tools are not included and have to be installed outside
 
 ## Serving content
 
-The apache container is configured in a way that it uses the domain name to look up the actual folder it should serve files from. Example: You've set the entry `- ~/Code:/var/www/html` (see above) to `- /my/folder:/var/www/html` and then create `/my/folder/foobar` on your system. Then you edit your hosts file to point `foobar.localhost` to `127.0.0.1` and visit `http://foobar.localhost` in your browser. Apache now dynamically serves the content of `/my/folder/foobar` to your browser.
+The apache container is configured in a way that it uses the domain name to look up the actual folder it should serve files from.
+
+Example: You've set the entry `- ~/Code:/var/www/html` (see above) to `- /my/folder:/var/www/html` and then create `/my/folder/foobar` on your system. Then you edit your hosts file to point `foobar.localhost` to `127.0.0.1` and visit `http://foobar.localhost` in your browser.
+
+Apache now automagically serves the content of `/my/folder/foobar` to your browser.
 
 ## Xdebug
 
