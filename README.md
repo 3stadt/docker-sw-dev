@@ -41,6 +41,23 @@ First, a quick overview of the project files.
   - Change the `volumes` entry that reads `- ~/Code:/var/www/html`
     - You have to change the part before `:`, it has to point to the folder your shopware root folders resides in. Note: Not the shopware folder itself!
   - change `MYSQL_ROOT_PASSWORD`and `PMA_PASSWORD` to the same value
+- run `docker-compose build` in this directory. This will take some time, but is only required on first run, changes to a `Dockerfile` and when switching PHP versions.
+
+
+## Changing PHP Versions
+
+To change your PHP Version, open the `docker-compose.yml` file in some editor and change line number 4:
+
+``` yaml
+version: '2'
+services:
+  swag_apache:
+    build: ./build-apache-php7
+```
+
+Replace the part which reads `build-apache-php7` (at least in the example above) to the name of any of the other PHP build folders, e.g. `build-apache-php5.6-ioncube`. Then run `docker-compose build` in the directory where the `docker-compose.yml` file is located.
+
+When switching to a PHP version, the first time you do this the build process will take some time.
 
 # Usage
 
