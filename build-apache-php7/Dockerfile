@@ -37,7 +37,9 @@ RUN docker-php-ext-enable xdebug
 RUN echo "date.timezone = 'Europe/Berlin'" >> /usr/local/etc/php/php.ini
 
 COPY xdebug/ext-xdebug.ini /usr/local/etc/php/conf.d/
+
 COPY sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
+
 COPY ssl/cert.txt /etc/ssl/certs/cert.txt
 COPY ssl/key.txt /etc/ssl/certs/key.txt
 

@@ -32,11 +32,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 
 RUN echo "date.timezone = 'Europe/Berlin'" >> /usr/local/etc/php/php.ini
 
-COPY sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
-
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 RUN php composer-setup.php
 RUN mv composer.phar /usr/local/bin/composer
+
+COPY sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 RUN a2enmod vhost_alias
 RUN a2enmod rewrite

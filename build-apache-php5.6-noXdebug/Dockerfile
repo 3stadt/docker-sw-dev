@@ -37,9 +37,12 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && rm ioncube_loaders_lin_x86-64.tar.gz \
     && echo "zend_extension = /var/www/ioncube/ioncube_loader_lin_5.6.so" > /usr/local/etc/php/conf.d/_000_ioncube.ini
 
-RUN echo "date.timezone = 'Europe/Berlin'" >> /usr/local/etc/php/php.ini
+RUN echo "date.timezone = 'Europe/Berlin'\n" >> /usr/local/etc/php/php.ini
+RUN echo "memory_limit = 512M\n" >> /usr/local/etc/php/php.ini
+RUN echo "upload_max_filesize = 20M" >> /usr/local/etc/php/php.ini
 
 COPY sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
+
 COPY ssl/cert.txt /etc/ssl/certs/cert.txt
 COPY ssl/key.txt /etc/ssl/certs/key.txt
 
