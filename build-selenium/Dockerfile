@@ -1,0 +1,10 @@
+FROM selenium/standalone-firefox-debug:2.53.0
+
+ENV LANGUAGE de_DE.UTF-8
+ENV LANG de_DE.UTF-8
+RUN locale-gen de_DE.UTF-8 \
+  && dpkg-reconfigure --frontend noninteractive locales \
+  && apt-get update -qqy \
+  && apt-get -qqy --no-install-recommends install \
+    language-pack-de \
+  && rm -rf /var/lib/apt/lists/*

@@ -7,12 +7,16 @@ services:
     links:
       - swag_db:mysql
       - swag_smtp:smtp
+      - swag_elastic:elasticsearch
+    extra_hosts:
+      - "shopware.localhost:127.0.0.1"
   swag_cli:
     extends:
       file: docker-base.yml
       service: swag_cli
     links:
       - swag_db:mysql
+      - swag_elastic:elasticsearch
   swag_smtp:
     extends:
       file: docker-base.yml
@@ -27,3 +31,7 @@ services:
       service: swag_pma
     links:
       - swag_db:db
+  swag_elastic:
+    extends:
+      file: docker-base.yml
+      service: swag_elastic
