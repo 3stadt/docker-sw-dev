@@ -1,16 +1,18 @@
 version: '2'
 services:
   swag_apache:
-    build: ./build-apache-php7
+    build: ./build-apache-php7-ioncube
     ports:
       - 80:80
       - 443:443
     volumes:
       - ~/Code:/var/www/html
+      - ./dnsmasq.d:/etc/dnsmasq.d
   swag_cli:
     build: ./build-php7-cli
     volumes:
       - ~/Code:/var/www/html
+      - ./sw-cli-tools/.config:/home/dev/.config
   swag_smtp:
     image: mailhog/mailhog
     ports:
@@ -33,6 +35,13 @@ services:
     ports:
       - 8181:80
     environment:
-      PMA_SECRET: KSyZsnrO9E5lk04uarNCC67kxZTqoUK1
+      PMA_SECRET: aMnKV11nQENOFTJDw2B7UoZbf7PlTOLp
       PMA_USER: root
       PMA_PASSWORD: toor
+  swag_elastic:
+    image: elasticsearch:latest
+    volumes:
+      - ./elasticsearch/config:/usr/share/elasticsearch/config
+    ports:
+      - 9200:9200
+      - 9300:9300

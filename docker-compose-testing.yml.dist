@@ -8,6 +8,8 @@ services:
     links:
       - swag_db:mysql
       - swag_smtp:smtp
+      - swag_elastic:elasticsearch.localhost
+      - assetgenerator
   swag_cli:
     extends:
       file: docker-base.yml
@@ -29,11 +31,19 @@ services:
     links:
       - swag_db:db
   selenium:
-    image: selenium/standalone-firefox-debug:2.53.0
+    build: ./build-selenium
     ports:
       - 4444:4444
       - 5900:5900
     volumes:
       - /dev/shm:/dev/shm
     links:
-      - swag_apache_testing:shopware.localhost
+      - swag_apache_testing:shopware-test.localhost
+  assetgenerator:
+    build: ./build-assetgenerator
+    volumes:
+      - ./assetgenerator:/var/www/html
+  swag_elastic:
+    extends:
+      file: docker-base.yml
+      service: swag_elastic
