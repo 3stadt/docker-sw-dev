@@ -2,6 +2,8 @@ FROM php:7-apache
 
 ADD php/_010_php.ini /usr/local/etc/php/conf.d/
 
+COPY ioncube/ioncube_loader_lin_x86-64_7.0b7.so /var/www/ioncube/
+
 RUN apt-get update && apt-get install --no-install-recommends -y \
         ant \
         libfreetype6-dev \
@@ -20,6 +22,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
         libxml2 \
         libxml2-dev \
         openssl \
+        libssl-dev \
     && docker-php-ext-install -j$(nproc) iconv mcrypt mysqli \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
@@ -29,7 +32,14 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && docker-php-ext-install soap \
     && docker-php-ext-install pdo pdo_mysql \
     && echo "sendmail_path = /usr/sbin/ssmtp -t" > /usr/local/etc/php/conf.d/_011_sendmail.ini \
-    && echo "mailhub=smtp:1025\nUseTLS=NO\nFromLineOverride=YES" > /etc/ssmtp/ssmtp.conf
+    && echo "mailhub=smtp:1025\nUseTLS=NO\nFromLineOverride=YES" > /etc/ssmtp/ssmtp.conf \
+    && cd /var/www \
+    && echo "zend_extension = /var/www/ioncube/ioncube_loader_lin_x86-64_7.0b7.so" > /usr/local/etc/php/conf.d/_000_ioncube.ini \
+ && rm -rf /var/lib/apt/lists/
+
+RUN pecl install -o -f redis \
+    &&  rm -rf /tmp/pear \
+    &&  echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
 
 RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug

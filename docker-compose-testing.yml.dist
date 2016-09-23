@@ -4,7 +4,7 @@ services:
     extends:
       file: docker-base.yml
       service: swag_apache
-    build: ./build-apache-php7-testing
+    build: ./images/build-apache-php7-testing
     links:
       - swag_db:mysql
       - swag_smtp:smtp
@@ -31,7 +31,7 @@ services:
     links:
       - swag_db:db
   selenium:
-    build: ./build-selenium
+    build: ./images/build-selenium
     ports:
       - 4444:4444
       - 5900:5900
@@ -40,7 +40,7 @@ services:
     links:
       - swag_apache_testing:shopware-test.localhost
   assetgenerator:
-    build: ./build-assetgenerator
+    build: ./images/build-assetgenerator
     volumes:
       - ./assetgenerator:/var/www/html
   swag_elastic:

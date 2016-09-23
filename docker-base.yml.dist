@@ -1,7 +1,7 @@
 version: '2'
 services:
   swag_apache:
-    build: ./build-apache-php7-ioncube
+    build: ./images/build-apache-php7-ioncube
     ports:
       - 80:80
       - 443:443
@@ -9,7 +9,7 @@ services:
       - ~/Code:/var/www/html
       - ./dnsmasq.d:/etc/dnsmasq.d
   swag_cli:
-    build: ./build-php7-cli
+    build: ./images/build-php7-cli
     volumes:
       - ~/Code:/var/www/html
       - ./sw-cli-tools/.config:/home/dev/.config
@@ -19,7 +19,7 @@ services:
       - 1025:1025
       - 8025:8025
   swag_db:
-    build: ./build-mysql
+    build: ./images/build-mysql
     environment:
       MYSQL_ROOT_PASSWORD: toor
       MYSQL_DATABASE: shopware

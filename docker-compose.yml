@@ -35,3 +35,9 @@ services:
     extends:
       file: docker-base.yml
       service: swag_elastic
+  swag_datagrip:
+    extends:
+      file: docker-base.yml
+      service: swag_datagrip
+    links:
+      - swag_db:mysql

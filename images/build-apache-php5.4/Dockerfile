@@ -1,4 +1,4 @@
-FROM php:5.6-apache
+FROM php:5.4-apache
 
 ADD php/_010_php.ini /usr/local/etc/php/
 
@@ -21,9 +21,9 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
         libxml2-dev \
         openssl \
         libssl-dev \
-    && docker-php-ext-install -j$(nproc) iconv mcrypt \
+    && docker-php-ext-install iconv mcrypt \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-install gd \
     && docker-php-ext-install mbstring \
     && docker-php-ext-install zip \
     && docker-php-ext-install ftp \
@@ -35,7 +35,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && wget http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz \
     && tar zxvf ioncube_loaders_lin_x86-64.tar.gz \
     && rm ioncube_loaders_lin_x86-64.tar.gz \
-    && echo "zend_extension = /var/www/ioncube/ioncube_loader_lin_5.6.so" > /usr/local/etc/php/conf.d/_000_ioncube.ini
+    && echo "zend_extension = /var/www/ioncube/ioncube_loader_lin_5.4.so" > /usr/local/etc/php/conf.d/_000_ioncube.ini \
+ && rm -rf /var/lib/apt/lists/
 
 RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug

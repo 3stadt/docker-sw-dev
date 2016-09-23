@@ -52,7 +52,7 @@ To change your PHP Version, open the `docker-compose.yml` file in some editor an
 version: '2'
 services:
   swag_apache:
-    build: ./build-apache-php7
+    build: ./images/build-apache-php7
 ```
 
 Replace the part which reads `build-apache-php7` (at least in the example above) to the name of any of the other PHP build folders, e.g. `build-apache-php5.6-ioncube`. Then run `docker-compose build` in the directory where the `docker-compose.yml` file is located.
