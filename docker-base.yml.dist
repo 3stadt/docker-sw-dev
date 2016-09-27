@@ -45,3 +45,11 @@ services:
     ports:
       - 9200:9200
       - 9300:9300
+  swag_nginx:
+    image: webdevops/php-nginx:debian-8
+    ports:
+      - 80:80
+      - 443:443
+    volumes: # Documentation of volumes: http://dockerfile.readthedocs.io/en/latest/content/DockerImages/dockerfiles/php-nginx.html
+      - ~/Code:/app
+      - ./nginx/:/opt/docker/etc/nginx/
