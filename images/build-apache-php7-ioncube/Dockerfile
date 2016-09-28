@@ -35,7 +35,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && echo "mailhub=smtp:1025\nUseTLS=NO\nFromLineOverride=YES" > /etc/ssmtp/ssmtp.conf \
     && cd /var/www \
     && echo "zend_extension = /var/www/ioncube/ioncube_loader_lin_x86-64_7.0b7.so" > /usr/local/etc/php/conf.d/_000_ioncube.ini \
- && rm -rf /var/lib/apt/lists/
+ && rm -rf /var/lib/apt/lists/*
 
 RUN pecl install -o -f redis \
     &&  rm -rf /tmp/pear \

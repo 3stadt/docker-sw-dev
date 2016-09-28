@@ -9,7 +9,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/* && \
- rm -rf /var/lib/apt/lists/
+    rm -rf /var/lib/apt/lists/*
 
 RUN useradd -m -s /bin/bash developer \
     && mkdir /home/developer/.DataGrip2016.2 \

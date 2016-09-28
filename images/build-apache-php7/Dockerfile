@@ -31,7 +31,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && docker-php-ext-install pdo pdo_mysql \
     && echo "sendmail_path = /usr/sbin/ssmtp -t" > /usr/local/etc/php/conf.d/_011_sendmail.ini \
     && echo "mailhub=smtp:1025\nUseTLS=NO\nFromLineOverride=YES" > /etc/ssmtp/ssmtp.conf \
- && rm -rf /var/lib/apt/lists/
+ && rm -rf /var/lib/apt/lists/*
 
 RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug

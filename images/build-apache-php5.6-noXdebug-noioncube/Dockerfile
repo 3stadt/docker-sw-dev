@@ -31,7 +31,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && docker-php-ext-install pdo pdo_mysql \
     && echo "sendmail_path = /usr/sbin/ssmtp -t" > /usr/local/etc/php/conf.d/sendmail.ini \
     && echo "mailhub=smtp:1025\nUseTLS=NO\nFromLineOverride=YES" > /etc/ssmtp/ssmtp.conf \
- && rm -rf /var/lib/apt/lists/
+ && rm -rf /var/lib/apt/lists/*
 
 RUN echo "date.timezone = 'Europe/Berlin'\n" >> /usr/local/etc/php/php.ini
 RUN echo "memory_limit = 512M\n" >> /usr/local/etc/php/php.ini

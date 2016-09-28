@@ -31,7 +31,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && docker-php-ext-install soap \
     && docker-php-ext-install curl \
     && docker-php-ext-install pdo pdo_mysql \
- && rm -rf /var/lib/apt/lists/
+ && rm -rf /var/lib/apt/lists/*
 
 RUN echo "date.timezone = 'Europe/Berlin'" >> /usr/local/etc/php/php.ini
 
