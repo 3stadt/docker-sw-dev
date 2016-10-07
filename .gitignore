@@ -1,6 +1,7 @@
 /docker-base.yml
 /docker-compose-testing.yml
 /docker-compose-nginx.yml
+/docker-compose.yml
 /variables.cfg
 /config.toml
 /.idea

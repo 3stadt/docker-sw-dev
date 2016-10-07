@@ -8,13 +8,13 @@
 Check if your system is meeting the prerequisites (versions may vary):
 
 ```bash
-$ docker --version                                                                                                                                                                                           2.2.3
-Docker version 1.10.3, build 20f81dd
+$ docker --version
+Docker version 1.12.1, build 23cf638
 ```
 
 ```bash
-$ docker-compose --version                                                                                                                                                                                   2.2.3
-docker-compose version 1.6.2, build 4d72027
+$ docker-compose --version
+docker-compose version 1.8.0-rc2, build c72c966
 ```
 
 # Configuration
@@ -23,39 +23,45 @@ First, a quick overview of the project files.
 
 ```bash
 .
-├── build-* #multiple build folders for all containers
-├── _delete_all_images_and_containers.sh #Only use if you understand the source
-├── docker-base.yml.dist #customize and rename to *.yml
-├── docker-compose-testing.yml.dist #customize and rename to *.yml
-├── docker-compose.yml #Entry point for production containers
-├── mysql
-│   ├── conf.d #Holds optional mysql ini files
-│   └── data #will contain mysql data files
-└── README.md #The file your are reading right now
+.
+├── assetgenerator                       # Script like lorempixel, can be used in Mink Tests
+├── datagrip-data                        # Data directory for jetbrains datagrip container
+├── dnsmasq.d                            # Config directory for dnsmasq container
+├── elasticsearch                        # Config directory for elasticsearch
+├── images
+│   └── build*                           # multiple image build directories
+├── nginx                                # Config directory for nginx container
+├── sw-cli-tools                         # config directory for sw tools, mounted in swag_cli
+├── _delete_all_images_and_containers.sh # Deletes all docker containers and images on your system (beta)
+├── docker-base.yml.dist                 # base image definitions, used for extending
+├── docker-compose-nginx.yml.dist        # standalone ngnix stack definition
+├── docker-compose-testing.yml.dist      # base extension, includes selenium
+├── docker-compose.yml                   # default base extension for shopware
+├── README.md                            # The file your are currently reading
+└── _update_all_docker_images.sh         # updates all docker images globally (beta)
 
 ```
 
-- **copy** the file `docker-base.yml.dist` to `docker-base.yml`
-  - If you want to, change all entries regarding `ports`
-    - The format is localport:containerport, only change the localport
-  - Change the `volumes` entry that reads `- ~/Code:/var/www/html`
-    - You have to change the part before `:`, it has to point to the folder your shopware root folders resides in. Note: Not the shopware folder itself!
-  - change `MYSQL_ROOT_PASSWORD`and `PMA_PASSWORD` to the same value
-- run `docker-compose build` in this directory. This will take some time, but is only required on first run, changes to a `Dockerfile` and when switching PHP versions.
+- **copy** the `*.yml.dist` files to `*.yml`
+  - Change the content of the `.yml` files according to your needs
+  - **If you don't customize these files, errors will occur**, mostly because of incorrect paths
+- run `docker-compose build` in the root directory. This will take some time, but is only required on first run, changes to a `Dockerfile` and when switching PHP versions.
 
 
-## Changing PHP Versions
+## Changing PHP Versions, usage of XDebug and Ioncube
 
-To change your PHP Version, open the `docker-compose.yml` file in some editor and change line number 4:
+The changing of versions can be done via environment variables (default) or directly inside the yaml files.
+
+To change directly inside the files, edit `docker-compose.yml` line 4 in a text editor: 
 
 ``` yaml
 version: '2'
 services:
   swag_apache:
-    build: ./images/build-apache-php7
+    build: ./images/build-apache-php<image name part>
 ```
 
-Replace the part which reads `build-apache-php7` (at least in the example above) to the name of any of the other PHP build folders, e.g. `build-apache-php5.6-ioncube`. Then run `docker-compose build` in the directory where the `docker-compose.yml` file is located.
+Replace the part which reads `build-apache-php<image name part>` (at least in the example above) to the name of any of the other Apache/PHP build folders, e.g. `build-apache-php7`. Then run `docker-compose build` in the directory where the `docker-compose.yml` file is located.
 
 When switching to a PHP version, the first time you do this the build process will take some time.
 
@@ -73,9 +79,9 @@ Testing environment start: `docker-compose up -f docker-compose-testing.yml -d -
 Dev environment stop: `docker-compose stop`
 Testing environment stop: `docker-compose -f docker-compose-testing.yml stop`
 
-Please note: Testing and dev environment must not be started at the same time
+Please note: Testing and dev environment must not be started at the same time.
 
-There are other useful commands listed below. Please note there is a GO tool `swdc` which simplifies the usage of these commands. Refer to n.dzoesch@shopware.com for further questions.
+There are other useful commands listed below. Please note there is a cli tool `swdc` which simplifies the usage of these commands. Refer to user xenomorph in #shopware-offtopic on freenode for further questions.
 
 ```bash
 #Perform ant-configure on a project
@@ -98,7 +104,7 @@ Replace `<PROJECTFOLDER>` with the folder name of a shopware installation.
 
 ## SW Tools
 
-At the time being the sw tools are not included and have to be installed outside the containers.
+The sw tools are included in swag_cli and can be used like in the above examples.
 
 ## Serving content
 
@@ -110,7 +116,7 @@ Apache now automagically serves the content of `/my/folder/foobar` to your brows
 
 ## Xdebug
 
-Xdebug is installed inside the swag_apache container, but not active by default in order to save performance.
+Xdebug is available using one of the `-xdebug` images (see images folder), but not active by default in order to save performance.
 To use it, you need to set up your IDE. In this readme, only PHPStorm will be covered, if you are using a different IDE you are welcome to adapt the instructions and make a pull request to update this readme.
 
 First, you need to setup a server. Within PHPStorm, navigate to `File` > `Settings` > `Language & Frameworks` > `PHP` > `Servers` and add a new one via the `+` icon or use your existing one.
@@ -126,4 +132,4 @@ Name it however you want, then select your server from the last step. You can fr
 
 To start a session, first set breakpoints. Then, activate the debug configuration, either via the run menu or by choosing and starting a configuration at the top right in PHPStorm. A Debugger window shoul pop up inside PHPStorm.
 
-As final step load your site in the browser and add your IDE key. Example: `http://shopware.local/?XDEBUG_SESSION_START=XDEBUG_PHPSTORM` where `XDEBUG_PHPSTORM` is the IDE key you've choosen during configuration.
+As final step load your site in the browser and add your IDE key. Example: `http://shopware.localhost/?XDEBUG_SESSION_START=XDEBUG_PHPSTORM` where `XDEBUG_PHPSTORM` is the IDE key you've choosen during configuration.

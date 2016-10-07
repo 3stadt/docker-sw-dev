@@ -1,7 +1,7 @@
 version: '2'
 services:
   swag_apache:
-    build: ./images/build-apache-php7-ioncube
+    build: ./images/build-apache-php${SWDOCKER_PHP_VERSION}${SWDOCKER_VARNISH}${SWDOCKER_IONCUBE}${SWDOCKER_XDEBUG}
     ports:
       - 80:80
       - 443:443

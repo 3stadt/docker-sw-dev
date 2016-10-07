@@ -4,7 +4,7 @@ services:
     extends:
       file: docker-base.yml
       service: swag_apache
-    build: ./images/build-apache-php7-testing
+    build: ./images/build-apache-php${SWDOCKER_PHP_VERSION}${SWDOCKER_VARNISH}${SWDOCKER_IONCUBE}${SWDOCKER_XDEBUG}
     links:
       - swag_db:mysql
       - swag_smtp:smtp
