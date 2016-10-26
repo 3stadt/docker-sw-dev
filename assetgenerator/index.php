@@ -1,9 +1,16 @@
 <?php
 
+function getRandomWord($len = 10)
+{
+    $word = array_merge(range('a', 'z'), range('A', 'Z'));
+    shuffle($word);
+    return substr(implode($word), 0, $len);
+}
+
 $filename = $_GET['file'];
 
 if (empty($filename)) {
-    throw new Exception("No filename in url.");
+    $filename = getRandomWord().'.jpg';
 }
 
 $allowedExtensions = ['png', 'jpg', 'gif'];
@@ -42,7 +49,7 @@ if (count($size) == 2 && (int)$size[0] > 0 && (int)$size[1] > 0) {
     $config->setImageHeight((int)$size[1]);
 }
 
-$config->setText($bareFilename = explode('.',$path[count($path) - 1])[0]);
+$config->setText($bareFilename = explode('.', $path[count($path) - 1])[0]);
 
 $generator = new RandomImageGenerator($config);
 $imgRes = $generator->getImageData();

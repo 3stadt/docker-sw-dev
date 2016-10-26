@@ -38,6 +38,10 @@ services:
       PMA_SECRET: aMnKV11nQENOFTJDw2B7UoZbf7PlTOLp
       PMA_USER: root
       PMA_PASSWORD: toor
+  swag_kopf:
+    image: lmenezes/elasticsearch-kopf
+    ports:
+      - 8080:80
   swag_elastic:
     image: elasticsearch:latest
     volumes:
