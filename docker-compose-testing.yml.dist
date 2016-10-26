@@ -43,6 +43,15 @@ services:
     build: ./images/build-assetgenerator
     volumes:
       - ./assetgenerator:/var/www/html
+  swag_kopf:
+    extends:
+      file: docker-base.yml
+      service: swag_kopf
+    environment:
+      KOPF_SERVER_NAME: kopf.localhost
+      KOPF_ES_SERVERS: elasticsearch:9200
+    links:
+      - swag_elastic:elasticsearch
   swag_elastic:
     extends:
       file: docker-base.yml
