@@ -25,7 +25,6 @@ First, a quick overview of the project files.
 .
 .
 ├── assetgenerator                       # Script like lorempixel, can be used in Mink Tests
-├── datagrip-data                        # Data directory for jetbrains datagrip container
 ├── dnsmasq.d                            # Config directory for dnsmasq container
 ├── elasticsearch                        # Config directory for elasticsearch
 ├── images
