@@ -1,4 +1,4 @@
-FROM selenium/standalone-firefox-debug:2.53.0
+FROM selenium/standalone-chrome-debug:latest
 
 RUN apt-get update -qqy \
   && apt-get -qqy --no-install-recommends install \
