@@ -57,3 +57,10 @@ services:
     volumes: # Documentation of volumes: http://dockerfile.readthedocs.io/en/latest/content/DockerImages/dockerfiles/php-nginx.html
       - ~/Code:/app
       - ./nginx/:/opt/docker/etc/nginx/
+  swag_datagrip:
+        build: ./images/build-datagrip
+        environment:
+          - DISPLAY
+        volumes:
+          - /tmp/.X11-unix:/tmp/.X11-unix:ro
+          - ./datagrip-data:/home/developer
