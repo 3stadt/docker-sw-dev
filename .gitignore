@@ -7,4 +7,5 @@
 /config.toml
 /.idea
 /mysql/data/*
+/mysql/log
 build*/config.json

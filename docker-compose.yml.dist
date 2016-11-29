@@ -7,7 +7,8 @@ services:
     links:
       - swag_db:mysql
       - swag_smtp:smtp
-      - swag_elastic:elasticsearch
+      - swag_elastic2:elasticsearch2
+      - swag_elastic5:elasticsearch5
     extra_hosts:
       - shopware.localhost:${SWDOCKER_TEST_HOST}
   swag_cli:
@@ -16,7 +17,8 @@ services:
       service: swag_cli
     links:
       - swag_db:mysql
-      - swag_elastic:elasticsearch
+      - swag_elastic2:elasticsearch2
+      - swag_elastic5:elasticsearch5
   swag_smtp:
     extends:
       file: docker-base.yml
@@ -37,16 +39,33 @@ services:
       service: swag_pma
     links:
       - swag_db:db
-  swag_kopf:
+  swag_kopf2:
     extends:
       file: docker-base.yml
       service: swag_kopf
+    ports:
+          - 8082:80
     environment:
-      KOPF_SERVER_NAME: kopf.localhost
-      KOPF_ES_SERVERS: elasticsearch:9200
+      KOPF_SERVER_NAME: kopf2.localhost
+      KOPF_ES_SERVERS: elasticsearch2:9200
     links:
-      - swag_elastic:elasticsearch
-  swag_elastic:
+      - swag_elastic2:elasticsearch2
+  swag_kopf5:
     extends:
       file: docker-base.yml
-      service: swag_elastic
+      service: swag_kopf
+    ports:
+          - 8085:80
+    environment:
+      KOPF_SERVER_NAME: kopf5.localhost
+      KOPF_ES_SERVERS: elasticsearch5:9200
+    links:
+      - swag_elastic5:elasticsearch5
+  swag_elastic2:
+    extends:
+      file: docker-base.yml
+      service: swag_elastic2
+  swag_elastic5:
+    extends:
+      file: docker-base.yml
+      service: swag_elastic5

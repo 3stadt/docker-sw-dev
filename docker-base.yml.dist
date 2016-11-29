@@ -42,13 +42,16 @@ services:
     image: lmenezes/elasticsearch-kopf
     ports:
       - 8080:80
-  swag_elastic:
-    image: elasticsearch:latest
+  swag_elastic2:
+    image: elasticsearch:2
     volumes:
-      - ./elasticsearch/config:/usr/share/elasticsearch/config
-    ports:
-      - 9200:9200
-      - 9300:9300
+      - ./elasticsearch2/config:/usr/share/elasticsearch/config
+  swag_elastic5:
+    image: elasticsearch:5
+    volumes:
+      - ./elasticsearch5/config:/usr/share/elasticsearch/config
+    environment:
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
   swag_nginx:
     image: webdevops/php-nginx:debian-8
     ports:

@@ -1,0 +1,6 @@
+network.host: 0.0.0.0
+http.cors.allow-origin: "*"
+http.cors.enabled: true
+
+# this value is required because we set "network.host"
+discovery.zen.minimum_master_nodes: 1
