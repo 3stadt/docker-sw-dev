@@ -39,6 +39,10 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 RUN php composer-setup.php
 RUN mv composer.phar /usr/local/bin/composer
 
+RUN wget https://phar.phpunit.de/phpunit.phar \
+    && chmod +x phpunit.phar \
+    && mv phpunit.phar /usr/local/bin/phpunit
+
 RUN useradd dev
 RUN mkdir -p /home/dev/bin
 
