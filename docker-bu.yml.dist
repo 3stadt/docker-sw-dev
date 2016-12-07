@@ -1,0 +1,12 @@
+version: '2'
+services:
+  swag_cli:
+    extends:
+      file: docker-base.yml
+      service: swag_cli
+    links:
+      - swag_db:mysql
+  swag_db:
+    extends:
+      file: docker-base.yml
+      service: swag_db

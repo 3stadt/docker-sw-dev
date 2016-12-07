@@ -1,0 +1,31 @@
+version: '2'
+services:
+  swag_nginx:
+    extends:
+      file: docker-base.yml
+      service: swag_nginx
+    links:
+      - swag_db:mysql
+      - swag_smtp:smtp
+    extra_hosts:
+      - "shopware.localhost:127.0.0.1"
+  swag_cli:
+    extends:
+      file: docker-base.yml
+      service: swag_cli
+    links:
+      - swag_db:mysql
+  swag_smtp:
+    extends:
+      file: docker-base.yml
+      service: swag_smtp
+  swag_db:
+    extends:
+      file: docker-base.yml
+      service: swag_db
+  swag_pma:
+    extends:
+      file: docker-base.yml
+      service: swag_pma
+    links:
+      - swag_db:db

@@ -1,2 +1,11 @@
+/docker-base.yml
+/docker-compose-testing.yml
+/docker-compose-nginx.yml
 /docker-compose.yml
+/docker-bu.yml
 /variables.cfg
+/config.toml
+/.idea
+/mysql/data/*
+/mysql/log
+build*/config.json

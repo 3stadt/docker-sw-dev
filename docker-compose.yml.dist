@@ -1,46 +1,71 @@
 version: '2'
 services:
   swag_apache:
-    build: ./apache-php7-build
+    extends:
+      file: docker-base.yml
+      service: swag_apache
     links:
       - swag_db:mysql
       - swag_smtp:smtp
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ~/Code/shopware:/var/www/html
-  swag_smtp:
-    image: mailhog/mailhog
-    ports:
-      - 1025:1025
-      - 8025:8025
-  selenium:
-    image: selenium/standalone-firefox
-    ports:
-      - 4444:4444
+      - swag_elastic2:elasticsearch2
+      - swag_elastic5:elasticsearch5
+    extra_hosts:
+      - shopware.localhost:${SWDOCKER_TEST_HOST}
+  swag_cli:
+    extends:
+      file: docker-base.yml
+      service: swag_cli
     links:
-      - swag_apache:shopware.local
       - swag_db:mysql
+      - swag_elastic2:elasticsearch2
+      - swag_elastic5:elasticsearch5
+  swag_smtp:
+    extends:
+      file: docker-base.yml
+      service: swag_smtp
   swag_db:
-    build: ./mysql-build
-    environment:
-      MYSQL_ROOT_PASSWORD: toor
-      MYSQL_DATABASE: shopware
-      MYSQL_USER: shopware
-      MYSQL_PASSWORD: shopware
-    ports:
-      - 3306:3306
-    volumes:
-      - ./mysql/conf.d:/etc/mysql/conf.d
-      - ./mysql/data:/var/lib/mysql
+    extends:
+      file: docker-base.yml
+      service: swag_db
+  swag_datagrip:
+      extends:
+        file: docker-base.yml
+        service: swag_datagrip
+      links:
+        - swag_db:mysql
   swag_pma:
-    image: phpmyadmin/phpmyadmin
+    extends:
+      file: docker-base.yml
+      service: swag_pma
     links:
       - swag_db:db
+  swag_kopf2:
+    extends:
+      file: docker-base.yml
+      service: swag_kopf
     ports:
-      - 8181:80
+          - 8082:80
     environment:
-      PMA_SECRET: change_this_for_security_reasons
-      PMA_USER: root
-      PMA_PASSWORD: toor
+      KOPF_SERVER_NAME: kopf2.localhost
+      KOPF_ES_SERVERS: elasticsearch2:9200
+    links:
+      - swag_elastic2:elasticsearch2
+  swag_kopf5:
+    extends:
+      file: docker-base.yml
+      service: swag_kopf
+    ports:
+          - 8085:80
+    environment:
+      KOPF_SERVER_NAME: kopf5.localhost
+      KOPF_ES_SERVERS: elasticsearch5:9200
+    links:
+      - swag_elastic5:elasticsearch5
+  swag_elastic2:
+    extends:
+      file: docker-base.yml
+      service: swag_elastic2
+  swag_elastic5:
+    extends:
+      file: docker-base.yml
+      service: swag_elastic5

@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-docker-compose run -eANT_OPTS=-D"file.encoding=UTF-8" swag_apache ant -f /var/www/html/build/build.xml configure

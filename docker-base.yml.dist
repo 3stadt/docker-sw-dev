@@ -1,0 +1,67 @@
+version: '2'
+services:
+  swag_apache:
+    build: ./images/build-apache-php${SWDOCKER_PHP_VERSION}${SWDOCKER_VARNISH}${SWDOCKER_IONCUBE}${SWDOCKER_XDEBUG}
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ~/Code:/var/www/html
+      - ./dnsmasq.d:/etc/dnsmasq.d
+  swag_cli:
+    build: ./images/build-php7-cli
+    volumes:
+      - ~/Code:/var/www/html
+      - ./sw-cli-tools/.config:/home/dev/.config
+  swag_smtp:
+    image: mailhog/mailhog
+    ports:
+      - 1025:1025
+      - 8025:8025
+  swag_db:
+    build: ./images/build-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: toor
+      MYSQL_DATABASE: shopware
+      MYSQL_USER: shopware
+      MYSQL_PASSWORD: shopware
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql/conf.d:/etc/mysql/conf.d
+      - ./mysql/data:/var/lib/mysql
+  swag_pma:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8181:80
+    environment:
+      PMA_SECRET: aMnKV11nQENOFTJDw2B7UoZbf7PlTOLp
+      PMA_USER: root
+      PMA_PASSWORD: toor
+  swag_kopf:
+    image: lmenezes/elasticsearch-kopf
+  swag_elastic2:
+    image: elasticsearch:2
+    volumes:
+      - ./elasticsearch2/config:/usr/share/elasticsearch/config
+  swag_elastic5:
+    image: elasticsearch:5
+    volumes:
+      - ./elasticsearch5/config:/usr/share/elasticsearch/config
+    environment:
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+  swag_nginx:
+    image: webdevops/php-nginx:debian-8
+    ports:
+      - 80:80
+      - 443:443
+    volumes: # Documentation of volumes: http://dockerfile.readthedocs.io/en/latest/content/DockerImages/dockerfiles/php-nginx.html
+      - ~/Code:/app
+      - ./nginx/:/opt/docker/etc/nginx/
+  swag_datagrip:
+        build: ./images/build-datagrip
+        environment:
+          - DISPLAY
+        volumes:
+          - /tmp/.X11-unix:/tmp/.X11-unix:ro
+          - ./datagrip-data:/home/developer

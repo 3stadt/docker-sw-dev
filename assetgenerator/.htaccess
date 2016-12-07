@@ -1,0 +1,6 @@
+<IfModule mod_rewrite.c>
+
+RewriteEngine On
+RewriteRule (.*)  index.php?file=$1 [QSA]
+
+</IfModule>
