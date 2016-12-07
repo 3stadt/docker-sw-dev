@@ -40,8 +40,6 @@ services:
       PMA_PASSWORD: toor
   swag_kopf:
     image: lmenezes/elasticsearch-kopf
-    ports:
-      - 8080:80
   swag_elastic2:
     image: elasticsearch:2
     volumes:
