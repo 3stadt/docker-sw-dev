@@ -32,6 +32,7 @@ services:
       - swag_db:db
   selenium:
     build: ./images/build-selenium
+    shm_size: 512M
     ports:
       - 4444:4444
       - 5900:5900
