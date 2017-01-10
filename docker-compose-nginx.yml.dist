@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 services:
   swag_nginx:
     extends:
@@ -8,7 +8,7 @@ services:
       - swag_db:mysql
       - swag_smtp:smtp
     extra_hosts:
-      - "shopware.localhost:127.0.0.1"
+      - "shopware.example:127.0.0.1"
   swag_cli:
     extends:
       file: docker-base.yml

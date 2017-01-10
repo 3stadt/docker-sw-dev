@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 services:
   swag_apache_testing:
     extends:
@@ -32,6 +32,7 @@ services:
       - swag_db:db
   selenium:
     build: ./images/build-selenium
+    image: selenium
     shm_size: 512M
     ports:
       - 4444:4444
@@ -42,6 +43,7 @@ services:
       - swag_apache_testing:shopware-test.localhost
   assetgenerator:
     build: ./images/build-assetgenerator
+    image: assetgenerator
     volumes:
       - ./assetgenerator:/var/www/html
   swag_kopf:

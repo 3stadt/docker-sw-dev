@@ -1,7 +1,8 @@
-version: '2'
+version: '2.1'
 services:
   swag_apache:
     build: ./images/build-apache-php${SWDOCKER_PHP_VERSION}${SWDOCKER_VARNISH}${SWDOCKER_IONCUBE}${SWDOCKER_XDEBUG}
+    image: swag_apache
     ports:
       - 80:80
       - 443:443
@@ -10,6 +11,7 @@ services:
       - ./dnsmasq.d:/etc/dnsmasq.d
   swag_cli:
     build: ./images/build-php7-cli
+    image: swag_cli
     volumes:
       - ~/Code:/var/www/html
       - ./sw-cli-tools/.config:/home/dev/.config
@@ -20,6 +22,7 @@ services:
       - 8025:8025
   swag_db:
     build: ./images/build-mysql
+    image: swag_db
     environment:
       MYSQL_ROOT_PASSWORD: toor
       MYSQL_DATABASE: shopware
@@ -30,6 +33,7 @@ services:
     volumes:
       - ./mysql/conf.d:/etc/mysql/conf.d
       - ./mysql/data:/var/lib/mysql
+      - ./mysql/log:/var/log/mysql_debug
   swag_pma:
     image: phpmyadmin/phpmyadmin
     ports:
@@ -58,10 +62,11 @@ services:
     volumes: # Documentation of volumes: http://dockerfile.readthedocs.io/en/latest/content/DockerImages/dockerfiles/php-nginx.html
       - ~/Code:/app
       - ./nginx/:/opt/docker/etc/nginx/
-  swag_datagrip:
-        build: ./images/build-datagrip
-        environment:
-          - DISPLAY
-        volumes:
-          - /tmp/.X11-unix:/tmp/.X11-unix:ro
-          - ./datagrip-data:/home/developer
+  datagrip:
+      build: ./images/build-datagrip
+      image: datagrip
+      environment:
+        - DISPLAY=DISPLAY
+      volumes:
+        - /tmp/.X11-unix:/tmp/.X11-unix:ro
+        - ./datagrip-data:/home/developer
