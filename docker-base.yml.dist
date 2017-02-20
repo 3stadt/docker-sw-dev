@@ -45,11 +45,11 @@ services:
   swag_kopf:
     image: lmenezes/elasticsearch-kopf
   swag_elastic2:
-    image: elasticsearch:2
+    image: elasticsearch:2-alpine
     volumes:
       - ./elasticsearch2/config:/usr/share/elasticsearch/config
   swag_elastic5:
-    image: elasticsearch:5
+    image: elasticsearch:5-alpine
     volumes:
       - ./elasticsearch5/config:/usr/share/elasticsearch/config
     environment:
