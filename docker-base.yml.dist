@@ -55,10 +55,9 @@ services:
     environment:
       ES_JAVA_OPTS: "-Xms1g -Xmx1g"
   swag_nginx:
-    image: webdevops/php-nginx:debian-8
+    build: ./images/build-nginx-php7
     ports:
       - 80:80
       - 443:443
-    volumes: # Documentation of volumes: http://dockerfile.readthedocs.io/en/latest/content/DockerImages/dockerfiles/php-nginx.html
-      - ~/Code:/app
-      - ./nginx/:/opt/docker/etc/nginx/
+    volumes:
+      - ~/Code:/var/www/html
