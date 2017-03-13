@@ -15,6 +15,12 @@ services:
     volumes:
       - ~/Code:/var/www/html
       - ./sw-cli-tools/.config:/home/dev/.config
+  swag_cli_x:
+    build: ./images/build-php7-cli-xdebug
+    image: swag_cli_x
+    volumes:
+      - ~/Code:/var/www/html
+      - ./sw-cli-tools/.config:/home/dev/.config
   swag_smtp:
     image: mailhog/mailhog
     ports:

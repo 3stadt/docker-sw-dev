@@ -16,6 +16,12 @@ services:
       service: swag_cli
     links:
       - swag_db:mysql
+  swag_cli_x:
+    extends:
+      file: docker-base.yml
+      service: swag_cli_x
+    links:
+      - swag_db:mysql
   swag_smtp:
     extends:
       file: docker-base.yml

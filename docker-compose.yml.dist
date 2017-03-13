@@ -19,6 +19,14 @@ services:
       - swag_db:mysql
       - swag_elastic2:elasticsearch2
       - swag_elastic5:elasticsearch5
+  swag_cli_x:
+    extends:
+      file: docker-base.yml
+      service: swag_cli_x
+    links:
+      - swag_db:mysql
+      - swag_elastic2:elasticsearch2
+      - swag_elastic5:elasticsearch5
   swag_smtp:
     extends:
       file: docker-base.yml
