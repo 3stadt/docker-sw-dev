@@ -1,8 +1,6 @@
-FROM php:7-apache
+FROM php:7.0-apache
 
 ADD php/_010_php.ini /usr/local/etc/php/conf.d/
-
-COPY ioncube/ioncube_loader_lin_x86-64_7.0b7.so /var/www/ioncube/
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
         ant \
@@ -34,15 +32,15 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && echo "sendmail_path = /usr/sbin/ssmtp -t" > /usr/local/etc/php/conf.d/_011_sendmail.ini \
     && echo "mailhub=smtp:1025\nUseTLS=NO\nFromLineOverride=YES" > /etc/ssmtp/ssmtp.conf \
     && cd /var/www \
-    && echo "zend_extension = /var/www/ioncube/ioncube_loader_lin_x86-64_7.0b7.so" > /usr/local/etc/php/conf.d/_000_ioncube.ini \
+    && wget https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz \
+    && tar zxvf ioncube_loaders_lin_x86-64.tar.gz \
+    && rm ioncube_loaders_lin_x86-64.tar.gz \
+    && echo "zend_extension = /var/www/ioncube/ioncube_loader_lin_7.0.so" > /usr/local/etc/php/conf.d/_000_ioncube.ini \
  && rm -rf /var/lib/apt/lists/*
 
 RUN pecl install -o -f redis \
     &&  rm -rf /tmp/pear \
     &&  echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
-
-RUN pecl install xdebug
-RUN docker-php-ext-enable xdebug
 
 RUN echo "date.timezone = 'Europe/Berlin'" >> /usr/local/etc/php/php.ini
 
