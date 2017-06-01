@@ -53,11 +53,15 @@ RUN mkdir -p /home/dev/bin
 ENV PATH /home/dev/bin:$PATH
 ENV HOME /home/dev
 
-RUN wget http://shopwarelabs.github.io/sw-cli-tools/sw.phar \
-    && mv sw.phar /home/dev/bin/sw
-RUN chmod +x /home/dev/bin/sw
-
 RUN chown -R dev: /home/dev
 USER dev
+
+WORKDIR /home/dev
+
+RUN git clone https://github.com/shopwareLabs/sw-cli-tools.git \
+    && cd sw-cli-tools && composer install
+RUN ln -s /home/dev/sw-cli-tools/bin/sw /home/dev/bin/sw
+
+RUN mkdir -p /home/dev/.config/sw-cli-tools
 
 WORKDIR /var/www/html

@@ -100,7 +100,7 @@ ShopConfig:
 DatabaseConfig:
   host: localhost
   user: root
-  pass: toor
+  pass: root
 
 ## If needed, you can change the owner of the shopware install dir
 # ChangeOwner:
