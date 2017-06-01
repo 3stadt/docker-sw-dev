@@ -1,4 +1,4 @@
-FROM php:7-apache
+FROM php:7.0-apache
 
 ADD php/_010_php.ini /usr/local/etc/php/conf.d/
 
