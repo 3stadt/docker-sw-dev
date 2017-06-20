@@ -9,12 +9,12 @@ Check if your system is meeting the prerequisites (versions may vary):
 
 ```bash
 $ docker --version
-Docker version 1.12.1, build 23cf638
+Docker version 17.05.0-ce
 ```
 
 ```bash
 $ docker-compose --version
-docker-compose version 1.8.0-rc2, build c72c966
+docker-compose version 1.11.1
 ```
 
 # Configuration
@@ -44,7 +44,6 @@ First, a quick overview of the project files.
 - **copy** the `*.yml.dist` files to `*.yml`
   - Change the content of the `.yml` files according to your needs
   - **If you don't customize these files, errors will occur**, mostly because of incorrect paths
-- run `docker-compose build` in the root directory. This will take some time, but is only required on first run, changes to a `Dockerfile` and when switching PHP versions.
 
 
 ## Changing PHP Versions, usage of XDebug and Ioncube
@@ -54,15 +53,14 @@ The changing of versions can be done via environment variables (default) or dire
 To change directly inside the files, edit `docker-compose.yml` line 4 in a text editor: 
 
 ``` yaml
-version: '2'
+version: '2.1'
 services:
   swag_apache:
-    build: ./images/build-apache-php<image name part>
+    image: 3stadt/swag-apache:<image name part>
 ```
 
-Replace the part which reads `build-apache-php<image name part>` (at least in the example above) to the name of any of the other Apache/PHP build folders, e.g. `build-apache-php7`. Then run `docker-compose build` in the directory where the `docker-compose.yml` file is located.
-
-When switching to a PHP version, the first time you do this the build process will take some time.
+Replace the part which reads `<image name part>` (at least in the example above) to the name of any of the other Apache/PHP build folders ommiting `build-apache`, e.g. `php7`.
+Then start or restart the stack.
 
 # Usage
 
@@ -80,7 +78,8 @@ Testing environment stop: `docker-compose -f docker-compose-testing.yml stop`
 
 Please note: Testing and dev environment must not be started at the same time.
 
-There are other useful commands listed below. Please note there is a cli tool `swdc` which simplifies the usage of these commands. Refer to user xenomorph in #shopware-offtopic on freenode for further questions.
+There are other useful commands listed below. Please note there is a cli tool `swdc` which simplifies the usage of these commands.
+It is located here: https://github.com/3stadt/shopware-docker-control
 
 ```bash
 #Perform ant-configure on a project
@@ -99,7 +98,7 @@ swag_cli /var/www/html/<PROJECTFOLDER>/var/cache/clear_cache.sh
 
 Replace `<PROJECTFOLDER>` with the folder name of a shopware installation.
 
-*Please note the -u1000 part:* This guide assumes you are using linux. The user id 1000 is usually your user id. If this is not the case, you have to change this value in the commands and the Dockerfiles!
+*Please note the -u1000 part:* This guide assumes you are using linux. The user id 1000 is usually your user id. If this is not the case, you have to change this value!
 
 ## SW Tools
 
