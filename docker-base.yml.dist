@@ -1,8 +1,7 @@
 version: '2.1'
 services:
   swag_apache:
-    build: ./images/build-apache-php${SWDOCKER_PHP_VERSION}${SWDOCKER_VARNISH}${SWDOCKER_IONCUBE}${SWDOCKER_XDEBUG}
-    image: swag_apache
+    image: 3stadt/swag-apache:${SWDOCKER_PHP_VERSION}${SWDOCKER_VARNISH}${SWDOCKER_IONCUBE}${SWDOCKER_XDEBUG}
     ports:
       - 80:80
       - 443:443
@@ -10,14 +9,12 @@ services:
       - ~/Code:/var/www/html
       - ./dnsmasq.d:/etc/dnsmasq.d
   swag_cli:
-    build: ./images/build-php7-cli
-    image: swag_cli
+    image: 3stadt/swag-cli:latest
     volumes:
       - ~/Code:/var/www/html
       - ./sw-cli-tools/.config:/home/dev/.config
   swag_cli_x:
-    build: ./images/build-php7-cli-xdebug
-    image: swag_cli_x
+    image: 3stadt/swag-cli:latest-xdebug
     volumes:
       - ~/Code:/var/www/html
       - ./sw-cli-tools/.config:/home/dev/.config
@@ -61,9 +58,10 @@ services:
     environment:
       ES_JAVA_OPTS: "-Xms1g -Xmx1g"
   swag_nginx:
-    build: ./images/build-nginx-php7
+    image: 3stadt/nginx-php7:latest
     ports:
       - 80:80
       - 443:443
     volumes:
       - ~/Code:/var/www/html
+      - ./nginx/:/opt/docker/etc/nginx/

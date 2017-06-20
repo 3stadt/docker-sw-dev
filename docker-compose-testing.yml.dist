@@ -4,7 +4,7 @@ services:
     extends:
       file: docker-base.yml
       service: swag_apache
-    build: ./images/build-apache-php${SWDOCKER_PHP_VERSION}${SWDOCKER_VARNISH}${SWDOCKER_IONCUBE}${SWDOCKER_XDEBUG}
+    image: 3stadt/swag-apache:${SWDOCKER_PHP_VERSION}${SWDOCKER_VARNISH}${SWDOCKER_IONCUBE}${SWDOCKER_XDEBUG}
     links:
       - swag_db:mysql
       - swag_smtp:smtp
@@ -37,8 +37,7 @@ services:
     links:
       - swag_db:db
   selenium:
-    build: ./images/build-selenium
-    image: selenium
+    image: image: 3stadt/selenium:latest
     shm_size: 512M
     ports:
       - 4444:4444
@@ -48,8 +47,7 @@ services:
     links:
       - swag_apache_testing:shopware-test.localhost
   assetgenerator:
-    build: ./images/build-assetgenerator
-    image: assetgenerator
+    image: image: 3stadt/assetgenerator:latest
     volumes:
       - ./assetgenerator:/var/www/html
   swag_kopf:
