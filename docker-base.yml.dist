@@ -1,7 +1,7 @@
 version: '2.1'
 services:
   swag_apache:
-    image: 3stadt/swag-apache:${SWDOCKER_PHP_VERSION}${SWDOCKER_VARNISH}${SWDOCKER_IONCUBE}${SWDOCKER_XDEBUG}
+    image: 3stadt/swag-apache:php${SWDOCKER_PHP_VERSION}${SWDOCKER_VARNISH}${SWDOCKER_IONCUBE}${SWDOCKER_XDEBUG}
     ports:
       - 80:80
       - 443:443
