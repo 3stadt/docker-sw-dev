@@ -32,12 +32,10 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && docker-php-ext-install pdo pdo_mysql \
     && echo "sendmail_path = /usr/sbin/ssmtp -t" > /usr/local/etc/php/conf.d/_011_sendmail.ini \
     && echo "mailhub=smtp:1025\nUseTLS=NO\nFromLineOverride=YES" > /etc/ssmtp/ssmtp.conf \
- && rm -rf /var/lib/apt/lists/*
-
-RUN pecl install xdebug
-RUN docker-php-ext-enable xdebug
-
-RUN echo "date.timezone = 'Europe/Berlin'" >> /usr/local/etc/php/php.ini
+    && rm -rf /var/lib/apt/lists/* \
+    && pecl install xdebug \
+    && docker-php-ext-enable xdebug \
+    && echo "date.timezone = 'Europe/Berlin'" >> /usr/local/etc/php/php.ini
 
 COPY xdebug/ext-xdebug.ini /usr/local/etc/php/conf.d/
 
@@ -46,17 +44,14 @@ COPY sites-available/000-default.conf /etc/apache2/sites-available/000-default.c
 COPY ssl/cert.txt /etc/ssl/certs/cert.txt
 COPY ssl/key.txt /etc/ssl/certs/key.txt
 
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN php composer-setup.php
-RUN mv composer.phar /usr/local/bin/composer
-
-RUN a2enmod vhost_alias
-RUN a2enmod rewrite
-RUN a2enmod ssl
-RUN a2ensite 000-default
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+&& php composer-setup.php \
+&& mv composer.phar /usr/local/bin/composer \
+&& a2enmod vhost_alias \
+&& a2enmod rewrite \
+&& a2enmod ssl \
+&& a2ensite 000-default \
+&& usermod -u 1000 www-data \
+&& chown -R www-data /var/www
 
 WORKDIR /var/www/html
-
-RUN usermod -u 1000 www-data
-
-RUN chown -R www-data /var/www

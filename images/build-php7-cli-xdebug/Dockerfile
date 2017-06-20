@@ -31,37 +31,34 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && docker-php-ext-install soap \
     && docker-php-ext-install curl \
     && docker-php-ext-install pdo pdo_mysql \
- && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && pecl install xdebug \
+    && docker-php-ext-enable xdebug
 
-RUN pecl install xdebug
-RUN docker-php-ext-enable xdebug
 COPY xdebug/ext-xdebug.ini /usr/local/etc/php/conf.d/
 
-RUN echo "date.timezone = 'Europe/Berlin'" >> /usr/local/etc/php/php.ini
-
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN php composer-setup.php
-RUN mv composer.phar /usr/local/bin/composer
-
-RUN wget https://phar.phpunit.de/phpunit.phar \
+RUN echo "date.timezone = 'Europe/Berlin'" >> /usr/local/etc/php/php.ini \
+    && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+    && php composer-setup.php \
+    && mv composer.phar /usr/local/bin/composer \
+    && wget https://phar.phpunit.de/phpunit.phar \
     && chmod +x phpunit.phar \
-    && mv phpunit.phar /usr/local/bin/phpunit
-
-RUN useradd dev
-RUN mkdir -p /home/dev/bin
+    && mv phpunit.phar /usr/local/bin/phpunit \
+    && useradd dev \
+    && mkdir -p /home/dev/bin \
+    && chown -R dev: /home/dev
 
 ENV PATH /home/dev/bin:$PATH
 ENV HOME /home/dev
 
-RUN chown -R dev: /home/dev
 USER dev
 
 WORKDIR /home/dev
 
 RUN git clone https://github.com/shopwareLabs/sw-cli-tools.git \
-    && cd sw-cli-tools && composer install
-RUN ln -s /home/dev/sw-cli-tools/bin/sw /home/dev/bin/sw
-
-RUN mkdir -p /home/dev/.config/sw-cli-tools
+    && cd sw-cli-tools \
+    && composer install \
+    && ln -s /home/dev/sw-cli-tools/bin/sw /home/dev/bin/sw \
+    && mkdir -p /home/dev/.config/sw-cli-tools
 
 WORKDIR /var/www/html
