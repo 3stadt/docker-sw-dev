@@ -24,8 +24,7 @@ services:
       - 1025:1025
       - 8025:8025
   swag_db:
-    build: ./images/build-mysql
-    image: swag_db
+    image: 3stadt/mysql
     environment:
       MYSQL_ROOT_PASSWORD: toor
       MYSQL_DATABASE: shopware
