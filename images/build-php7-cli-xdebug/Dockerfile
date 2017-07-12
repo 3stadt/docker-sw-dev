@@ -59,6 +59,7 @@ RUN git clone https://github.com/shopwareLabs/sw-cli-tools.git \
     && cd sw-cli-tools \
     && composer install \
     && ln -s /home/dev/sw-cli-tools/bin/sw /home/dev/bin/sw \
-    && mkdir -p /home/dev/.config/sw-cli-tools
+    && mkdir -p /home/dev/.config/sw-cli-tools \
+    && composer global require hirak/prestissimo
 
 WORKDIR /var/www/html

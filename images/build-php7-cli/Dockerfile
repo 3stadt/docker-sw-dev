@@ -31,14 +31,14 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && docker-php-ext-install soap \
     && docker-php-ext-install curl \
     && docker-php-ext-install pdo pdo_mysql \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
     && echo "date.timezone = 'Europe/Berlin'" >> /usr/local/etc/php/php.ini \
     && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php composer-setup.php \
     && mv composer.phar /usr/local/bin/composer \
     && wget https://phar.phpunit.de/phpunit.phar \
     && chmod +x phpunit.phar \
-    && mv phpunit.phar /usr/local/bin/phpunit
+    && mv phpunit.phar /usr/local/bin/phpunit \
     && useradd dev \
     && mkdir -p /home/dev/bin \
     && chown -R dev: /home/dev
@@ -53,6 +53,7 @@ RUN git clone https://github.com/shopwareLabs/sw-cli-tools.git \
     && cd sw-cli-tools \
     && composer install \
     && ln -s /home/dev/sw-cli-tools/bin/sw /home/dev/bin/sw \
-    && mkdir -p /home/dev/.config/sw-cli-tools
+    && mkdir -p /home/dev/.config/sw-cli-tools \
+    && composer global require hirak/prestissimo
 
 WORKDIR /var/www/html
