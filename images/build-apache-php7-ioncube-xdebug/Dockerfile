@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
         ant \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
+        libwebp-dev \
         libmcrypt-dev \
         libpng12-dev \
         zip \
@@ -22,7 +23,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
         openssl \
         libssl-dev \
     && docker-php-ext-install -j$(nproc) iconv mcrypt mysqli \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-webp-dir=/usr/include \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install mbstring \
     && docker-php-ext-install zip \
