@@ -2,13 +2,11 @@ FROM php:7-cli
 
 ADD php/_010_php.ini /usr/local/etc/php/conf.d/
 
-RUN apt-get update && apt-get install --no-install-recommends -y \
-        openjdk-7-jre-headless \
+RUN mkdir -p /usr/share/man/man1 && apt-get update && apt-get install --no-install-recommends -y \
         ant \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
-        libmcrypt-dev \
-        libpng12-dev \
+        libpng-dev \
         zip \
         zlib1g-dev \
         unzip \
@@ -22,7 +20,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
         libxml2 \
         libxml2-dev \
         libssl-dev \
-    && docker-php-ext-install -j$(nproc) iconv mcrypt \
+    && docker-php-ext-install -j$(nproc) iconv \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install mbstring \
@@ -31,6 +29,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && docker-php-ext-install soap \
     && docker-php-ext-install curl \
     && docker-php-ext-install pdo pdo_mysql \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && echo "date.timezone = 'Europe/Berlin'" >> /usr/local/etc/php/php.ini \
     && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
